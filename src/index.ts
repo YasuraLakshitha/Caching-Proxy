@@ -7,5 +7,13 @@ const cli: Interface = readLine.createInterface({
 })
 
 cli.question("caching-proxy ", (userInput: string) => {
-    console.log(userInput)
+    if (!/--port\s\d{4}\s--origin\s\S+/.test(userInput)) {
+        const strings: string[] = userInput.split(" ")
+
+        const port: number = parseInt(strings[1])
+        const url: string = strings[strings.length - 1]
+
+        console.log(port + " " + url)
+
+    }
 })
