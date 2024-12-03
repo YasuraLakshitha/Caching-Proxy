@@ -1,5 +1,6 @@
 import * as readLine from "node:readline";
 import {Interface} from "node:readline";
+import {configServer} from "./server";
 
 const cli: Interface = readLine.createInterface({
     input: process.stdin,
@@ -11,9 +12,8 @@ cli.question("caching-proxy ", (userInput: string) => {
         const strings: string[] = userInput.split(" ")
 
         const port: number = parseInt(strings[1])
-        const url: string = strings[strings.length - 1]
+        const url: string = strings[strings.length]
 
-        console.log(port + " " + url)
-
+        configServer(port, url)
     }
 })
