@@ -17,7 +17,10 @@ This project implements a **Caching-proxy** server that fetches data from the pu
    ```bash
    git clone https://github.com/yourusername/caching-proxy.git
    cd caching-proxy
+```
 
 2. Install dependencies
-  ```bash
-    npm install 
+    npm install
+
+3. Start server
+    node server.ts
