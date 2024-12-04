@@ -9,14 +9,13 @@ function configServer(port: number, resource: string,): void {
             if (req.method === 'GET' && req.url === '/') {
                 try {
                     if (urlSet.size > 0 && urlSet.has(resource)) {
-                        prompt("X-Cache: HIT")
 
                         res.setHeader('ContentType', 'application/json')
                             .setHeader('X-Cache','HIT')
 
                         res.end(JSON.stringify({status: 200, data: urlSet.get(resource)}))
+                        return;
                     }
-                    prompt("X-Cache: MISS")
 
                     const response: Promise<Response> = await fetchData();
 
@@ -46,7 +45,6 @@ function configServer(port: number, resource: string,): void {
 }
 
 export {configServer}
-
 
 //--port 3000 --origin http://dummyjson.com
 // --port 3000 --origin http://localhost:3000/products
