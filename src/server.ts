@@ -1,24 +1,43 @@
 import {createServer, IncomingMessage, Server, ServerResponse} from "node:http";
-import {exec} from "node:child_process";
+
+const urlSet = new Map<string, Record<string, any>>()
 
 function configServer(port: number, resource: string,): void {
 
     const server: Server<typeof IncomingMessage, typeof ServerResponse> = createServer(
-        (req: IncomingMessage, res: ServerResponse) => {
+        async (req: IncomingMessage, res: ServerResponse) => {
             if (req.method === 'GET' && req.url === '/') {
                 try {
-                    fetchData();
-                } catch (e) {
-                    console.log(e)
-                }finally {
+                    if (urlSet.size > 0 && urlSet.has(resource)) {
+                        prompt("X-Cache: HIT")
+
+                        res.setHeader('ContentType', 'application/json')
+                            .setHeader('X-Cache','HIT')
+
+                        res.end(JSON.stringify({status: 200, data: urlSet.get(resource)}))
+                    }
+                    prompt("X-Cache: MISS")
+
+                    const response: Promise<Response> = await fetchData();
+
+                    urlSet.set(resource, response)
+                    res.setHeader('ContentType', 'application/json')
+                        .setHeader('X-Cache', 'MISS')
+
+                    res.end(JSON.stringify({status: 200, data: urlSet.get(resource)}))
+
+                } catch (e: unknown) {
+                    throw Error("Operation unsuccessful")
+                } finally {
                     server.emit('close')
                 }
 
             }
         })
 
-    const fetchData = () => {
-        exec(`start https://dummyjson.com/${resource}`)
+    const fetchData = async (): Promise<any> => {
+        const responseData: Response = await fetch(`https://dummyjson.com/${resource}`)
+        return responseData.ok ? responseData.json() : Promise.reject(Error(await responseData.json()))
     }
 
     server.listen(port, (): void => {
