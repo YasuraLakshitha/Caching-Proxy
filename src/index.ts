@@ -11,9 +11,8 @@ cli.question("caching-proxy ", (userInput: string) => {
         const strings: string[] = userInput.split(" ")
 
         const port: number = parseInt(strings[1])
-        const url: string = strings[strings.length - 1]
-
-        console.log(port + " " + url)
+        const urlStrings: string[] = strings[strings.length - 1].split("/")
+        const resouce: string = urlStrings[urlStrings.length - 1]
 
     }
 })
