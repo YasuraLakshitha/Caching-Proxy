@@ -7,6 +7,9 @@ const cli: Interface = readLine.createInterface({
     output: process.stdout
 })
 
+cli.write("Welcome to caching proxy\n")
+cli.write("Format : --port <port> --origin <origin>\n")
+
 cli.question("caching-proxy ", (userInput: string): void => {
     if (/--port\s\d{4}\s--origin\s\S+/.test(userInput)) {
         const strings: string[] = userInput.split(" ")

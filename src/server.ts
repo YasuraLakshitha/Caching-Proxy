@@ -1,8 +1,11 @@
 import {createServer, IncomingMessage, Server, ServerResponse} from "node:http";
+import {exec} from "node:child_process";
 
 const urlSet = new Map<string, Record<string, any>>()
 
 function configServer(port: number, resource: string,): void {
+
+    exec(`start http://localhost:${port}/`)
 
     const server: Server<typeof IncomingMessage, typeof ServerResponse> = createServer(
         async (req: IncomingMessage, res: ServerResponse) => {
@@ -11,8 +14,7 @@ function configServer(port: number, resource: string,): void {
                     if (urlSet.size > 0 && urlSet.has(resource)) {
 
                         res.setHeader('ContentType', 'application/json')
-                            .setHeader('X-Cache','HIT')
-
+                        res.setHeader('X-Cache', 'HIT')
                         res.end(JSON.stringify({status: 200, data: urlSet.get(resource)}))
                         return;
                     }
@@ -21,16 +23,13 @@ function configServer(port: number, resource: string,): void {
 
                     urlSet.set(resource, response)
                     res.setHeader('ContentType', 'application/json')
-                        .setHeader('X-Cache', 'MISS')
+                    res.setHeader('X-Cache', 'MISS')
 
                     res.end(JSON.stringify({status: 200, data: urlSet.get(resource)}))
 
                 } catch (e: unknown) {
-                    throw Error("Operation unsuccessful")
-                } finally {
-                    server.emit('close')
+                    res.end(JSON.stringify({status: 204, message: 'No content'}))
                 }
-
             }
         })
 
