@@ -27,3 +27,4 @@ This project implements a **Caching-proxy** server that fetches data from the pu
 3. Start server
  	```bash
   node server.ts
+  ```
