@@ -15,9 +15,15 @@ cli.question("caching-proxy ", (userInput: string): void => {
         const strings: string[] = userInput.split(" ")
 
         const port: number = parseInt(strings[1])
-        const urlStrings: string[] = strings[strings.length - 1].split("/")
+        const urlStrings: string[] = strings[strings.length - 1].split(/[/:]/)
         const resource: string = urlStrings[urlStrings.length - 1]
 
+        if (urlStrings.indexOf(port.toString()) === -1) {
+            cli.write("Port unmatched please try again...\n")
+            process.exit(1)
+        }
         configServer(port, resource)
+    } else {
+        cli.write('invalid format, please type "rs" to try again...\n')
     }
 })

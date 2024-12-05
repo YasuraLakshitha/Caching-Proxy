@@ -3,9 +3,9 @@ import {exec} from "node:child_process";
 
 const urlSet = new Map<string, Record<string, any>>()
 
-function configServer(port: number, resource: string,): void {
+function configServer(port: number, resource: string): void {
 
-    exec(`start http://localhost:${port}/`)
+    if (resource && port) exec(`start http://localhost:${port}/`)
 
     const server: Server<typeof IncomingMessage, typeof ServerResponse> = createServer(
         async (req: IncomingMessage, res: ServerResponse) => {
