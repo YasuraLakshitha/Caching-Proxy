@@ -7,8 +7,9 @@ const cli: Interface = readLine.createInterface({
     output: process.stdout
 })
 
-cli.write("\t\tWelcome to caching proxy\n\n")
-cli.write("\tInput format : --port <port> --origin <origin>\n\n")
+cli.write("\t\tWelcome to caching proxy\n")
+cli.write("\tInput format : --port <port> --origin <origin>\n")
+cli.write('\tInfo :Type "rs" to rerun\n\n')
 
 cli.question("\tcaching-proxy:\t", (userInput: string): void => {
     if (/--port\s\d{4}\s--origin\s\S+/.test(userInput)) {
@@ -19,13 +20,12 @@ cli.question("\tcaching-proxy:\t", (userInput: string): void => {
         const resource: string = urlStrings[urlStrings.length - 1]
 
         if (urlStrings.indexOf(port.toString()) === -1) {
-            cli.write("Port unmatched please type 'rs' to try again...\n")
+            cli.write("Port unmatched. please try again...\n")
         }
         configServer(port, resource)
     } else if ('clear cache'.trim().includes(userInput.toLowerCase().trim())) {
         clearCache()
-        cli.write("\t\tCache cleared...")
-    }
+        cli.write("\t\tCache cleared...\n")
 
-    else cli.write('Invalid input format, please type "rs" to try again...\n')
+    } else cli.write('Invalid input format, try again...\n')
 })
