@@ -31,6 +31,7 @@ function configServer(port: number, resource: string): void {
                     res.end(JSON.stringify({status: 204, message: 'No content'}))
                 }
             }
+
         })
 
     const fetchData = async (): Promise<any> => {
@@ -43,7 +44,11 @@ function configServer(port: number, resource: string): void {
     })
 }
 
-export {configServer}
+function clearCache() {
+    urlSet.clear();
+}
+
+export {configServer,clearCache}
 
 //--port 3000 --origin http://dummyjson.com
 // --port 3000 --origin http://localhost:3000/products
